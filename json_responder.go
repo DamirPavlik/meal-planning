@@ -17,3 +17,17 @@ func respondWithJSON(w http.ResponseWriter, code int, playload interface{}) {
 	w.WriteHeader(code)
 	w.Write(data)
 }
+
+func respondWithError(w http.ResponseWriter, code int, msg string) {
+	if code < 499 {
+		log.Println("res with 5xx erorr: ", msg)
+	}
+
+	type errResponse struct {
+		Error string `json:"error"`
+	}
+
+	respondWithJSON(w, code, errResponse{
+		Error: msg,
+	})
+}
