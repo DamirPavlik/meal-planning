@@ -4,10 +4,15 @@ import (
 	"log"
 	"os"
 
+	"github.com/damirpavlik/meal-planning/internal/database"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 )
+
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 	godotenv.Load(".env")
@@ -16,6 +21,21 @@ func main() {
 	if port == "" {
 		log.Fatal("port not found")
 	}
+
+	// dbURL := os.Getenv("DB_URL")
+	// if port == "" {
+	// 	log.Fatal("db url not found")
+	// }
+
+	// conn, err := sql.Open("postgres", dbURL)
+	// if err != nil {
+	// 	log.Fatal("can't con to db: ", err)
+	// }
+
+	// // db := database.New(conn)
+	// // // apiCfg := apiConfig{
+	// // // 	DB: db,
+	// // // }
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -29,4 +49,15 @@ func main() {
 	v1router := chi.NewRouter()
 	v1router.Get("/healtz", handlerHealthz)
 	router.Mount("/v1", v1router)
+
+	// srv := &http.Server{
+	// 	Handler: router,
+	// 	Addr:    ":" + port,
+	// }
+
+	// log.Printf("srv started on: %v", port)
+	// err = srv.ListenAndServe()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 }
