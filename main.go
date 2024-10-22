@@ -1,7 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/damirpavlik/meal-planning/internal/database"
@@ -22,20 +24,20 @@ func main() {
 		log.Fatal("port not found")
 	}
 
-	// dbURL := os.Getenv("DB_URL")
-	// if port == "" {
-	// 	log.Fatal("db url not found")
-	// }
+	dbURL := os.Getenv("DB_URL")
+	if port == "" {
+		log.Fatal("db url not found")
+	}
 
-	// conn, err := sql.Open("postgres", dbURL)
-	// if err != nil {
-	// 	log.Fatal("can't con to db: ", err)
-	// }
+	conn, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatal("can't con to db: ", err)
+	}
 
-	// // db := database.New(conn)
-	// // // apiCfg := apiConfig{
-	// // // 	DB: db,
-	// // // }
+	db := database.New(conn)
+	apiCfg := apiConfig{
+		DB: db,
+	}
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -48,16 +50,18 @@ func main() {
 	}))
 	v1router := chi.NewRouter()
 	v1router.Get("/healtz", handlerHealthz)
+	v1router.Post("/users", apiCfg.handlerCreateUser)
+
 	router.Mount("/v1", v1router)
 
-	// srv := &http.Server{
-	// 	Handler: router,
-	// 	Addr:    ":" + port,
-	// }
+	srv := &http.Server{
+		Handler: router,
+		Addr:    ":" + port,
+	}
 
-	// log.Printf("srv started on: %v", port)
-	// err = srv.ListenAndServe()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	log.Printf("srv started on: %v", port)
+	err = srv.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
