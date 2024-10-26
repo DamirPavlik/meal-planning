@@ -20,7 +20,7 @@ func respondWithJSON(w http.ResponseWriter, code int, playload interface{}) {
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	if code < 499 {
-		log.Println("res with 5xx erorr: ", msg)
+		log.Println("res with 5xx error: ", msg)
 	}
 
 	type errResponse struct {
