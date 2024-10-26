@@ -10,6 +10,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+
+	_ "github.com/lib/pq"
 )
 
 type apiConfig struct {
@@ -25,13 +27,13 @@ func main() {
 	}
 
 	dbURL := os.Getenv("DB_URL")
-	if port == "" {
-		log.Fatal("db url not found")
+	if dbURL == "" {
+		log.Fatal("DB_URL is not found in the environment")
 	}
 
 	conn, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		log.Fatal("can't con to db: ", err)
+		log.Fatal("Can not connect to db: ", err)
 	}
 
 	db := database.New(conn)
