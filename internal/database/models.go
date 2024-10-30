@@ -17,4 +17,5 @@ type User struct {
 	Email         string
 	Password      string
 	CalorieIntake int32
+	BearersToken  string
 }
