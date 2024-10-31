@@ -10,6 +10,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type Ingredient struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Calories  int32
+	Name      string
+	UserID    uuid.UUID
+}
+
 type User struct {
 	ID            uuid.UUID
 	CreatedAt     time.Time
