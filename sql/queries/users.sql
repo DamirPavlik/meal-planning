@@ -7,3 +7,6 @@ RETURNING *;
 
 -- name: GetUserByBearers :one
 SELECT * FROM users WHERE bearers_token = $1;
+
+-- name: GetUserByID :one
+SELECT * FROM users WHERE id = $1;
