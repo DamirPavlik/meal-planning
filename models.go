@@ -28,3 +28,23 @@ func dbUserToUser(dbUser database.User) User {
 		BearersToken:  dbUser.BearersToken,
 	}
 }
+
+type Ingridient struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at`
+	Name      string    `json:"name"`
+	Calories  int       `json:"calories"`
+	UserID    uuid.UUID `json:"user_id"`
+}
+
+func dbIngridientToIngridient(dbIngridient database.Ingredient) Ingridient {
+	return Ingridient{
+		ID:        dbIngridient.ID,
+		CreatedAt: dbIngridient.CreatedAt,
+		UpdatedAt: dbIngridient.UpdatedAt,
+		Name:      dbIngridient.Name,
+		Calories:  int(dbIngridient.Calories),
+		UserID:    dbIngridient.UserID,
+	}
+}
