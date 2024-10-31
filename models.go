@@ -14,6 +14,7 @@ type User struct {
 	Email         string    `json:"email"`
 	Password      string    `json:"password"`
 	CalorieIntake int32     `json:"calorie_intake"`
+	BearersToken  string    `json:"bearers_token"`
 }
 
 func dbUserToUser(dbUser database.User) User {
@@ -24,5 +25,6 @@ func dbUserToUser(dbUser database.User) User {
 		Email:         dbUser.Email,
 		Password:      dbUser.Password,
 		CalorieIntake: dbUser.CalorieIntake,
+		BearersToken:  dbUser.BearersToken,
 	}
 }
