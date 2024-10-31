@@ -56,6 +56,8 @@ func main() {
 	v1router.Post("/users", apiCfg.handlerCreateUser)
 	v1router.Get("/user/{userID}", apiCfg.middlewareAuth(apiCfg.handlerGetUserByID))
 
+	v1router.Post("/ingridient", apiCfg.middlewareAuth(apiCfg.handlerCreateIngridient))
+
 	router.Mount("/v1", v1router)
 
 	srv := &http.Server{
