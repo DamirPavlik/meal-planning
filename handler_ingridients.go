@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/damirpavlik/meal-planning/internal/database"
+	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 )
 
@@ -36,4 +37,26 @@ func (apiCfg *apiConfig) handlerCreateIngridient(w http.ResponseWriter, r *http.
 	}
 
 	respondWithJSON(w, 200, dbIngridientToIngridient(ingridient))
+}
+
+func (apiCfg *apiConfig) handlerGetIngridientById(w http.ResponseWriter, r *http.Request) {
+	ingridientIdStr := chi.URLParam(r, "ingridientId")
+	if ingridientIdStr == "" {
+		http.Error(w, "couldn't get ingridient id", 400)
+		return
+	}
+
+	ingridientId, err := uuid.Parse(ingridientIdStr)
+	if err != nil {
+		http.Error(w, "couldn't parse id", 400)
+		return
+	}
+
+	ingridient, err := apiCfg.DB.GetIngridientById(r.Context(), ingridientId)
+	if err != nil {
+		http.Error(w, "couldn't get ingridient", 400)
+		return
+	}
+
+	respondWithJSON(w, 200, ingridient)
 }
