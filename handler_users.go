@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/damirpavlik/meal-planning/internal/database"
+	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 )
 
@@ -37,4 +38,26 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 	}
 
 	respondWithJSON(w, 201, dbUserToUser(user))
+}
+
+func (apiCfg *apiConfig) handlerGetUserByID(w http.ResponseWriter, r *http.Request, user database.User) {
+	userIDStr := chi.URLParam(r, "userID")
+	if userIDStr == "" {
+		http.Error(w, "user ID is required", http.StatusBadRequest)
+		return
+	}
+
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		http.Error(w, "invalid user ID format", http.StatusBadRequest)
+		return
+	}
+
+	retrievedUser, err := apiCfg.DB.GetUserByID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, dbUserToUser(retrievedUser))
 }
