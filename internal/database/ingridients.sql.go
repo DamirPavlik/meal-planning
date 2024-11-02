@@ -47,3 +47,21 @@ func (q *Queries) CreateIngridient(ctx context.Context, arg CreateIngridientPara
 	)
 	return i, err
 }
+
+const getIngridientById = `-- name: GetIngridientById :one
+SELECT id, created_at, updated_at, calories, name, user_id FROM ingredients WHERE id = $1
+`
+
+func (q *Queries) GetIngridientById(ctx context.Context, id uuid.UUID) (Ingredient, error) {
+	row := q.db.QueryRowContext(ctx, getIngridientById, id)
+	var i Ingredient
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Calories,
+		&i.Name,
+		&i.UserID,
+	)
+	return i, err
+}
