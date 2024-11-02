@@ -19,6 +19,26 @@ type Ingredient struct {
 	UserID    uuid.UUID
 }
 
+type Meal struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Name      string
+}
+
+type MealCalory struct {
+	MealID    uuid.UUID
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Calories  interface{}
+}
+
+type MealIngredient struct {
+	MealID       uuid.UUID
+	IngredientID uuid.UUID
+}
+
 type User struct {
 	ID            uuid.UUID
 	CreatedAt     time.Time
