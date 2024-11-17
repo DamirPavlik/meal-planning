@@ -60,6 +60,8 @@ func main() {
 	v1router.Post("/ingridient", apiCfg.middlewareAuth(apiCfg.handlerCreateIngridient))
 	v1router.Get("/ingridient/{ingridientId}", apiCfg.handlerGetIngridientById)
 
+	v1router.Post("/meal", apiCfg.middlewareAuth(apiCfg.handlerCreateMeal))
+
 	router.Mount("/v1", v1router)
 
 	srv := &http.Server{
