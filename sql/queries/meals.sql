@@ -1,7 +1,7 @@
 -- name: CreateMeal :one
-INSERT INTO meals (id, created_at, updated_at, name)
-VALUES ($1, $2, $3, $4)
-RETURNING id;
+INSERT INTO meals (id, created_at, updated_at, name, user_id)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING *; 
 
 -- name: AddIngredientsToMeal :exec
 INSERT INTO meal_ingredients (meal_id, ingredient_id)
