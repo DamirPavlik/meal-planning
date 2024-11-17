@@ -6,3 +6,6 @@ RETURNING *;
 -- name: AddIngredientsToMeal :exec
 INSERT INTO meal_ingredients (meal_id, ingredient_id)
 SELECT $1, unnest($2::UUID[]);
+
+-- name: GetAllMealsForUser :many
+SELECT name FROM meals WHERE user_id = $1;
