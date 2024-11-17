@@ -29,9 +29,9 @@ func (q *Queries) AddIngredientsToMeal(ctx context.Context, arg AddIngredientsTo
 }
 
 const createMeal = `-- name: CreateMeal :one
-INSERT INTO meals (id, created_at, updated_at, name)
-VALUES ($1, $2, $3, $4)
-RETURNING id
+INSERT INTO meals (id, created_at, updated_at, name, user_id)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, created_at, updated_at, name, user_id
 `
 
 type CreateMealParams struct {
@@ -39,16 +39,24 @@ type CreateMealParams struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Name      string
+	UserID    uuid.UUID
 }
 
-func (q *Queries) CreateMeal(ctx context.Context, arg CreateMealParams) (uuid.UUID, error) {
+func (q *Queries) CreateMeal(ctx context.Context, arg CreateMealParams) (Meal, error) {
 	row := q.db.QueryRowContext(ctx, createMeal,
 		arg.ID,
 		arg.CreatedAt,
 		arg.UpdatedAt,
 		arg.Name,
+		arg.UserID,
 	)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i Meal
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.UserID,
+	)
+	return i, err
 }

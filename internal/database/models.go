@@ -24,6 +24,7 @@ type Meal struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Name      string
+	UserID    uuid.UUID
 }
 
 type MealCalory struct {
