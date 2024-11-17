@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
 	"time"
 
 	"github.com/damirpavlik/meal-planning/internal/database"
@@ -27,6 +28,19 @@ func (apiCfg *apiConfig) handlerCreateMeal(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	mealNames, err := apiCfg.DB.GetAllMealsForUser(r.Context(), user.ID)
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("failed getting meals: %v", err))
+		return
+	}
+
+	for _, meal := range mealNames {
+		if meal == params.Name {
+			respondWithError(w, 400, "user already has a meal with that name")
+			return
+		}
+	}
+
 	meal, err := apiCfg.DB.CreateMeal(r.Context(), database.CreateMealParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
@@ -41,5 +55,4 @@ func (apiCfg *apiConfig) handlerCreateMeal(w http.ResponseWriter, r *http.Reques
 	}
 
 	respondWithJSON(w, 200, dbMealToMeal(meal))
-
 }
