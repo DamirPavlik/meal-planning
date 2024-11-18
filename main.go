@@ -61,6 +61,7 @@ func main() {
 	v1router.Get("/ingridient/{ingridientId}", apiCfg.handlerGetIngridientById)
 
 	v1router.Post("/meal", apiCfg.middlewareAuth(apiCfg.handlerCreateMeal))
+	v1router.Get("/meal/{mealId}", apiCfg.middlewareAuth(apiCfg.handlerGetMealByID))
 
 	router.Mount("/v1", v1router)
 
