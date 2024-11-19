@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/damirpavlik/meal-planning/internal/database"
+	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 )
 
@@ -55,4 +56,26 @@ func (apiCfg *apiConfig) handlerCreateMeal(w http.ResponseWriter, r *http.Reques
 	}
 
 	respondWithJSON(w, 200, dbMealToMeal(meal))
+}
+
+func (apiCfg *apiConfig) handlerGetMealByID(w http.ResponseWriter, r *http.Request, user database.User) {
+	mealIDstr := chi.URLParam(r, "mealId")
+	if mealIDstr == "" {
+		respondWithError(w, 400, "meal id is empty")
+		return
+	}
+
+	mealID, err := uuid.Parse(mealIDstr)
+	if err != nil {
+		respondWithError(w, 400, "could not parse meal id")
+		return
+	}
+
+	meal, err := apiCfg.DB.GetMealById(r.Context(), mealID)
+	if err != nil {
+		respondWithError(w, 400, "could not get a meal")
+		return
+	}
+
+	respondWithJSON(w, 200, meal)
 }
