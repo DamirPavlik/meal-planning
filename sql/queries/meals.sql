@@ -9,3 +9,6 @@ SELECT $1, unnest($2::UUID[]);
 
 -- name: GetAllMealsForUser :many
 SELECT name FROM meals WHERE user_id = $1;
+
+-- name: GetMealById :one
+SELECT * FROM meals WHERE id = $1;
