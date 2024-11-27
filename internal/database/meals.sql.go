@@ -87,3 +87,20 @@ func (q *Queries) GetAllMealsForUser(ctx context.Context, userID uuid.UUID) ([]s
 	}
 	return items, nil
 }
+
+const getMealById = `-- name: GetMealById :one
+SELECT id, created_at, updated_at, name, user_id FROM meals WHERE id = $1
+`
+
+func (q *Queries) GetMealById(ctx context.Context, id uuid.UUID) (Meal, error) {
+	row := q.db.QueryRowContext(ctx, getMealById, id)
+	var i Meal
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.UserID,
+	)
+	return i, err
+}
