@@ -48,3 +48,21 @@ func dbIngridientToIngridient(dbIngridient database.Ingredient) Ingridient {
 		UserID:    dbIngridient.UserID,
 	}
 }
+
+type Meal struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at`
+	Name      string    `json:"name"`
+	UserID    uuid.UUID `json:"user_id"`
+}
+
+func dbMealToMeal(dbMeal database.Meal) Meal {
+	return Meal{
+		ID:        dbMeal.ID,
+		CreatedAt: dbMeal.CreatedAt,
+		UpdatedAt: dbMeal.UpdatedAt,
+		Name:      dbMeal.Name,
+		UserID:    dbMeal.UserID,
+	}
+}
